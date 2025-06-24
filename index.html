@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Financeira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .active-nav {
+            border-left: 4px solid #fff;
+            background-color: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white flex flex-col">
+            <div class="p-5 border-b border-blue-700">
+                <h1 class="text-xl font-bold">FinanceGest</h1>
+                <p class="text-xs text-blue-200">Sistema de Gestão Financeira</p>
+            </div>
+            <nav class="flex-1 overflow-y-auto py-4">
+                <ul>
+                    <li class="nav-item active-nav">
+                        <a href="#" class="block px-5 py-3 flex items-center" id="dashboard-link">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="block px-5 py-3 flex items-center" id="payments-link">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Pagamentos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="block px-5 py-3 flex items-center" id="receivables-link">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                            Recebimentos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="block px-5 py-3 flex items-center" id="approvals-link">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Aprovações
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="block px-5 py-3 flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Configurações
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-blue-700">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center mr-3">
+                        <span class="font-semibold">JD</span>
+                    </div>
+                    <div>
+                        <p class="font-medium">João Dias</p>
+                        <p class="text-xs text-blue-300">Administrador</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center">
+                        <h2 class="text-xl font-semibold text-gray-800" id="page-title">Dashboard</h2>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 rounded-full hover:bg-gray-100">
+                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+                        <div class="relative">
+                            <input type="text" placeholder="Pesquisar..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <svg class="w-5 h-5 text-gray-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Total a Pagar</p>
+                                    <p class="text-2xl font-bold text-gray-800">R$ 45.850,00</p>
+                                    <p class="text-xs text-red-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                        8,5% desde o mês passado
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Total a Receber</p>
+                                    <p class="text-2xl font-bold text-gray-800">R$ 72.430,00</p>
+                                    <p class="text-xs text-green-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                        12,3% desde o mês passado
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Aprovações Pendentes</p>
+                                    <p class="text-2xl font-bold text-gray-800">18</p>
+                                    <p class="text-xs text-amber-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        5 urgentes
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Saldo Atual</p>
+                                    <p class="text-2xl font-bold text-gray-800">R$ 26.580,00</p>
+                                    <p class="text-xs text-blue-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                        Atualizado hoje
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-semibold text-gray-800">Fluxo de Caixa</h3>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full font-medium">Mensal</button>
+                                    <button class="px-3 py-1 text-xs text-gray-500 rounded-full font-medium">Trimestral</button>
+                                    <button class="px-3 py-1 text-xs text-gray-500 rounded-full font-medium">Anual</button>
+                                </div>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="cashFlowChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-semibold text-gray-800">Aprovações por Alçada</h3>
+                                <div>
+                                    <select class="text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                        <option>Últimos 30 dias</option>
+                                        <option>Últimos 60 dias</option>
+                                        <option>Últimos 90 dias</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="approvalsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-800">Transações Recentes</h3>
+                                <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">Ver todas</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12345</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pagamento Fornecedor ABC</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Pagamento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 8.500,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">Aguardando Aprovação</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12344</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Recebimento Cliente XYZ</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Recebimento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 12.750,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Concluído</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">14/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12343</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pagamento Serviços TI</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Pagamento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 5.200,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">Aprovado</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">13/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12342</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Recebimento Cliente ABC</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Recebimento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 9.800,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Concluído</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">12/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12341</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pagamento Aluguel</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Pagamento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 3.500,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Rejeitado</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payments Section -->
+                <div id="payments-section" class="hidden space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Gestão de Pagamentos</h2>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Novo Pagamento
+                        </button>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <select class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Todos</option>
+                                    <option>Pendente</option>
+                                    <option>Aprovado</option>
+                                    <option>Rejeitado</option>
+                                    <option>Concluído</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Período</label>
+                                <select class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Últimos 30 dias</option>
+                                    <option>Últimos 60 dias</option>
+                                    <option>Últimos 90 dias</option>
+                                    <option>Este ano</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fornecedor</label>
+                                <input type="text" placeholder="Nome do fornecedor" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Valor</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" placeholder="Min" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                    <input type="text" placeholder="Max" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg mr-2">Limpar</button>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Aplicar Filtros</button>
+                        </div>
+                    </div>
+
+                    <!-- Payments Table -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fornecedor</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimento</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alçada Atual</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12345</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Fornecedor ABC</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Materiais de escritório</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 8.500,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">20/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">Aguardando Aprovação</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gerente Financeiro</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-green-600 hover:text-green-900">Aprovar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12343</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Serviços TI</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Manutenção servidores</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 5.200,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">18/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">Aprovado</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Diretor</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-gray-600 hover:text-gray-900">Pagar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12341</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Imobiliária XYZ</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Aluguel mensal</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 3.500,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Rejeitado</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Diretor Financeiro</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-amber-600 hover:text-amber-900">Revisar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12340</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Fornecedor DEF</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Equipamentos</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 12.800,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">25/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">Aguardando Aprovação</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Presidente</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-green-600 hover:text-green-900">Aprovar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12339</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Fornecedor GHI</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Serviços de limpeza</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 1.800,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">05/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Pago</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gerente Financeiro</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm text-gray-700">
+                                    Mostrando <span class="font-medium">1</span> a <span class="font-medium">5</span> de <span class="font-medium">42</span> resultados
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-500">Anterior</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-blue-600 text-white">1</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">2</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">3</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">4</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">5</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">Próximo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receivables Section -->
+                <div id="receivables-section" class="hidden space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Gestão de Recebimentos</h2>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Novo Recebimento
+                        </button>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">A Receber (30 dias)</p>
+                                    <p class="text-2xl font-bold text-gray-800">R$ 45.850,00</p>
+                                    <p class="text-xs text-green-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                        12% desde o mês passado
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Recebido (este mês)</p>
+                                    <p class="text-2xl font-bold text-gray-800">R$ 32.430,00</p>
+                                    <p class="text-xs text-green-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                        8,3% desde o mês passado
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-white rounded-xl shadow p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Em Atraso</p>
+                                    <p class="text-2xl font-bold text-gray-800">R$ 8.750,00</p>
+                                    <p class="text-xs text-red-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                        3,2% desde o mês passado
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <select class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Todos</option>
+                                    <option>Pendente</option>
+                                    <option>Recebido</option>
+                                    <option>Em atraso</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Período</label>
+                                <select class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Últimos 30 dias</option>
+                                    <option>Últimos 60 dias</option>
+                                    <option>Últimos 90 dias</option>
+                                    <option>Este ano</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
+                                <input type="text" placeholder="Nome do cliente" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Valor</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" placeholder="Min" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                    <input type="text" placeholder="Max" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg mr-2">Limpar</button>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Aplicar Filtros</button>
+                        </div>
+                    </div>
+
+                    <!-- Receivables Table -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimento</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#23456</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Cliente XYZ</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Serviços de consultoria</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 12.750,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">25/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">Pendente</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-green-600 hover:text-green-900">Registrar Recebimento</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#23455</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Cliente ABC</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Venda de produtos</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 9.800,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">12/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Recebido</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#23454</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Cliente DEF</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Serviços técnicos</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 5.300,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">05/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Em atraso</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-amber-600 hover:text-amber-900">Enviar Lembrete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#23453</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Cliente GHI</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Assinatura mensal</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 3.450,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">30/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">Pendente</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-green-600 hover:text-green-900">Registrar Recebimento</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#23452</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Cliente JKL</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Projeto especial</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 18.200,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">02/05/2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Em atraso</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 mr-3">Detalhes</button>
+                                            <button class="text-amber-600 hover:text-amber-900">Enviar Lembrete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm text-gray-700">
+                                    Mostrando <span class="font-medium">1</span> a <span class="font-medium">5</span> de <span class="font-medium">28</span> resultados
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-500">Anterior</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-blue-600 text-white">1</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">2</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">3</button>
+                                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-700">Próximo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approvals Section -->
+                <div id="approvals-section" class="hidden space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800">Gestão de Aprovações</h2>
+                        <div class="flex space-x-2">
+                            <button class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Pendentes (18)
+                            </button>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Histórico
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Approval Levels -->
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">Níveis de Aprovação</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex-1 min-w-[200px] border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-medium text-gray-800">Nível 1</h4>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">Gerente</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">Até R$ 5.000,00</p>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    3 pendentes
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-[200px] border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-medium text-gray-800">Nível 2</h4>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">Diretor</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">R$ 5.000,01 até R$ 10.000,00</p>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    7 pendentes
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-[200px] border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-medium text-gray-800">Nível 3</h4>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-indigo-800">Diretor Financeiro</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">R$ 10.000,01 até R$ 50.000,00</p>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    5 pendentes
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-[200px] border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-medium text-gray-800">Nível 4</h4>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-pink-100 text-pink-800">Presidente</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">Acima de R$ 50.000,00</p>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    3 pendentes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Approvals -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-800">Aprovações Pendentes</h3>
+                                <div>
+                                    <select class="text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                        <option>Todos os níveis</option>
+                                        <option>Nível 1 - Gerente</option>
+                                        <option>Nível 2 - Diretor</option>
+                                        <option>Nível 3 - Diretor Financeiro</option>
+                                        <option>Nível 4 - Presidente</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Solicitante</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nível Atual</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prazo</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#12345</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Pagamento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Materiais de escritório - Fornecedor ABC</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">R$ 8.500,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Maria Silva</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">Nível 2 - Diretor</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">2 dias</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'954bb596b612521f',t:'MTc1MDc2MjY5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
