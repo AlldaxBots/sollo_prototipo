@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Lançamentos Financeiros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .approval-badge {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white py-6 px-4 hidden md:block">
+            <div class="flex items-center justify-center mb-8">
+                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h1 class="text-xl font-bold">FinanceFlow</h1>
+            </div>
+            <nav>
+                <a href="#" class="flex items-center py-2 px-4 rounded-lg mb-1 hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="flex items-center py-2 px-4 rounded-lg mb-1 bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Lançamentos
+                </a>
+                <a href="#" class="flex items-center py-2 px-4 rounded-lg mb-1 hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                    Relatórios
+                </a>
+                <a href="#" class="flex items-center py-2 px-4 rounded-lg mb-1 hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    </svg>
+                    Configurações
+                </a>
+            </nav>
+            <div class="mt-auto pt-8">
+                <a href="#" class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Sair
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center md:hidden">
+                        <button class="text-gray-500 focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        <h1 class="text-lg font-semibold ml-2">FinanceFlow</h1>
+                    </div>
+                    <div class="hidden md:block">
+                        <h1 class="text-xl font-semibold">Lançamentos Financeiros</h1>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="relative">
+                            <input type="text" placeholder="Buscar..." class="bg-gray-100 rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4 relative">
+                            <button class="flex items-center focus:outline-none">
+                                <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                                    JD
+                                </div>
+                                <span class="ml-2 hidden md:block">João Dias</span>
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
+                <!-- Filters and Actions -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700 transition">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Novo Lançamento
+                        </button>
+                        <div class="relative">
+                            <select class="bg-white border border-gray-300 rounded-lg px-4 py-2 appearance-none pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>Todos os tipos</option>
+                                <option>Pagamentos</option>
+                                <option>Recebimentos</option>
+                            </select>
+                            <svg class="w-5 h-5 text-gray-400 absolute right-2 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div class="relative">
+                            <select class="bg-white border border-gray-300 rounded-lg px-4 py-2 appearance-none pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>Status de aprovação</option>
+                                <option>Pendente</option>
+                                <option>Aprovado parcialmente</option>
+                                <option>Aprovado</option>
+                                <option>Rejeitado</option>
+                            </select>
+                            <svg class="w-5 h-5 text-gray-400 absolute right-2 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="bg-white border border-gray-300 p-2 rounded-lg hover:bg-gray-50">
+                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                            </svg>
+                        </button>
+                        <button class="bg-white border border-gray-300 p-2 rounded-lg hover:bg-gray-50">
+                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend for approval levels -->
+                <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
+                    <h3 class="font-medium mb-2">Legenda de Aprovações</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <span class="approval-badge bg-gray-300"></span>
+                            <span class="text-sm">Pendente</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="approval-badge bg-green-500"></span>
+                            <span class="text-sm">Aprovado</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="approval-badge bg-red-500"></span>
+                            <span class="text-sm">Rejeitado</span>
+                        </div>
+                        <div class="flex items-center ml-4">
+                            <span class="text-sm font-medium">D1:</span>
+                            <span class="text-sm ml-1">Diretor 1</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm font-medium">D2:</span>
+                            <span class="text-sm ml-1">Diretor 2</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm font-medium">F:</span>
+                            <span class="text-sm ml-1">Financeiro</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 - Pagamento Pendente -->
+                    <div class="card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 border-yellow-500">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Pagamento</span>
+                                    <h3 class="text-lg font-semibold mt-2">Fornecedor ABC Ltda</h3>
+                                </div>
+                                <div class="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    Pendente
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Valor:</span>
+                                    <span class="font-semibold">R$ 12.500,00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Vencimento:</span>
+                                    <span>15/06/2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-500">Categoria:</span>
+                                    <span>Materiais de escritório</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <span class="text-sm font-medium mr-2">Status de aprovação:</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D1</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D2</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">F</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm transition">
+                                        Aprovar
+                                    </button>
+                                    <button class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg text-sm transition">
+                                        Rejeitar
+                                    </button>
+                                    <button class="bg-white border border-gray-300 hover:bg-gray-50 p-2 rounded-lg text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 - Recebimento Parcialmente Aprovado -->
+                    <div class="card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 border-blue-500">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Recebimento</span>
+                                    <h3 class="text-lg font-semibold mt-2">Cliente XYZ S.A.</h3>
+                                </div>
+                                <div class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    Parcial
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Valor:</span>
+                                    <span class="font-semibold">R$ 28.750,00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Vencimento:</span>
+                                    <span>22/06/2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-500">Categoria:</span>
+                                    <span>Serviços prestados</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <span class="text-sm font-medium mr-2">Status de aprovação:</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D1</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D2</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">F</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm transition">
+                                        Aprovar
+                                    </button>
+                                    <button class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg text-sm transition">
+                                        Rejeitar
+                                    </button>
+                                    <button class="bg-white border border-gray-300 hover:bg-gray-50 p-2 rounded-lg text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 - Pagamento Aprovado -->
+                    <div class="card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 border-green-500">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Pagamento</span>
+                                    <h3 class="text-lg font-semibold mt-2">Fornecedor Tech Ltda</h3>
+                                </div>
+                                <div class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    Aprovado
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Valor:</span>
+                                    <span class="font-semibold">R$ 5.320,00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Vencimento:</span>
+                                    <span>10/06/2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-500">Categoria:</span>
+                                    <span>Equipamentos de TI</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <span class="text-sm font-medium mr-2">Status de aprovação:</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D1</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D2</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">F</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm transition">
+                                        Efetuar Pagamento
+                                    </button>
+                                    <button class="bg-white border border-gray-300 hover:bg-gray-50 p-2 rounded-lg text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 - Recebimento Rejeitado -->
+                    <div class="card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 border-red-500">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Recebimento</span>
+                                    <h3 class="text-lg font-semibold mt-2">Cliente Omega Inc.</h3>
+                                </div>
+                                <div class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    Rejeitado
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Valor:</span>
+                                    <span class="font-semibold">R$ 8.900,00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Vencimento:</span>
+                                    <span>05/06/2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-500">Categoria:</span>
+                                    <span>Consultoria</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <span class="text-sm font-medium mr-2">Status de aprovação:</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D1</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D2</span>
+                                            <span class="approval-badge bg-red-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">F</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm transition">
+                                        Revisar
+                                    </button>
+                                    <button class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg text-sm transition">
+                                        Arquivar
+                                    </button>
+                                    <button class="bg-white border border-gray-300 hover:bg-gray-50 p-2 rounded-lg text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 - Pagamento Pendente -->
+                    <div class="card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 border-yellow-500">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Pagamento</span>
+                                    <h3 class="text-lg font-semibold mt-2">Serviços Gerais S.A.</h3>
+                                </div>
+                                <div class="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    Pendente
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Valor:</span>
+                                    <span class="font-semibold">R$ 3.450,00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Vencimento:</span>
+                                    <span>18/06/2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-500">Categoria:</span>
+                                    <span>Manutenção</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <span class="text-sm font-medium mr-2">Status de aprovação:</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D1</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D2</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">F</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm transition">
+                                        Aprovar
+                                    </button>
+                                    <button class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg text-sm transition">
+                                        Rejeitar
+                                    </button>
+                                    <button class="bg-white border border-gray-300 hover:bg-gray-50 p-2 rounded-lg text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 - Recebimento Parcialmente Aprovado -->
+                    <div class="card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 border-blue-500">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Recebimento</span>
+                                    <h3 class="text-lg font-semibold mt-2">Cliente Beta Ltda</h3>
+                                </div>
+                                <div class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                                    Parcial
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Valor:</span>
+                                    <span class="font-semibold">R$ 15.800,00</span>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-500">Vencimento:</span>
+                                    <span>25/06/2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-500">Categoria:</span>
+                                    <span>Produtos vendidos</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <span class="text-sm font-medium mr-2">Status de aprovação:</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D1</span>
+                                            <span class="approval-badge bg-green-500"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">D2</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-xs mr-1">F</span>
+                                            <span class="approval-badge bg-gray-300"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm transition">
+                                        Aprovar
+                                    </button>
+                                    <button class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg text-sm transition">
+                                        Rejeitar
+                                    </button>
+                                    <button class="bg-white border border-gray-300 hover:bg-gray-50 p-2 rounded-lg text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between mt-8">
+                    <div class="text-sm text-gray-600">
+                        Mostrando <span class="font-medium">1-6</span> de <span class="font-medium">24</span> lançamentos
+                    </div>
+                    <div class="flex space-x-1">
+                        <button class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-500 hover:bg-gray-50">
+                            Anterior
+                        </button>
+                        <button class="px-3 py-1 rounded-md bg-blue-600 text-white">
+                            1
+                        </button>
+                        <button class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                            2
+                        </button>
+                        <button class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                            3
+                        </button>
+                        <button class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                            4
+                        </button>
+                        <button class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-500 hover:bg-gray-50">
+                            Próximo
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('.md\\:hidden button');
+            const sidebar = document.querySelector('.w-64');
+            
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function() {
+                    sidebar.classList.toggle('hidden');
+                    sidebar.classList.toggle('absolute');
+                    sidebar.classList.toggle('z-10');
+                    sidebar.classList.toggle('h-screen');
+                });
+            }
+
+            // Add functionality to approval buttons
+            const approveButtons = document.querySelectorAll('button:contains("Aprovar")');
+            const rejectButtons = document.querySelectorAll('button:contains("Rejeitar")');
+            
+            approveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const pendingBadge = card.querySelector('.approval-badge.bg-gray-300');
+                    if (pendingBadge) {
+                        pendingBadge.classList.remove('bg-gray-300');
+                        pendingBadge.classList.add('bg-green-500');
+                        
+                        // Check if all approvals are complete
+                        const remainingPending = card.querySelectorAll('.approval-badge.bg-gray-300').length;
+                        if (remainingPending === 0) {
+                            const statusBadge = card.querySelector('.rounded-full');
+                            if (statusBadge) {
+                                statusBadge.className = 'bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium';
+                                statusBadge.textContent = 'Aprovado';
+                                card.classList.remove('border-yellow-500', 'border-blue-500');
+                                card.classList.add('border-green-500');
+                            }
+                        } else {
+                            const statusBadge = card.querySelector('.rounded-full');
+                            if (statusBadge && statusBadge.textContent.trim() === 'Pendente') {
+                                statusBadge.className = 'bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium';
+                                statusBadge.textContent = 'Parcial';
+                            }
+                        }
+                    }
+                });
+            });
+            
+            rejectButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const pendingBadge = card.querySelector('.approval-badge.bg-gray-300');
+                    if (pendingBadge) {
+                        pendingBadge.classList.remove('bg-gray-300');
+                        pendingBadge.classList.add('bg-red-500');
+                        
+                        const statusBadge = card.querySelector('.rounded-full');
+                        if (statusBadge) {
+                            statusBadge.className = 'bg-red-50 text-red-700 px-3 py-1 rounded-full text-sm font-medium';
+                            statusBadge.textContent = 'Rejeitado';
+                            card.classList.remove('border-yellow-500', 'border-blue-500');
+                            card.classList.add('border-red-500');
+                        }
+                    }
+                });
+            });
+        });
+
+        // Helper function for button selectors
+        if (!Element.prototype.matches) {
+            Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+        }
+
+        if (!Element.prototype.closest) {
+            Element.prototype.closest = function(s) {
+                var el = this;
+                do {
+                    if (el.matches(s)) return el;
+                    el = el.parentElement || el.parentNode;
+                } while (el !== null && el.nodeType === 1);
+                return null;
+            };
+        }
+
+        NodeList.prototype.forEach = Array.prototype.forEach;
+
+        if (!window.NodeList.prototype.forEach) {
+            NodeList.prototype.forEach = Array.prototype.forEach;
+        }
+
+        // Add :contains selector functionality
+        jQuery.expr[':'].contains = function(a, i, m) {
+            return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        };
+
+        // Polyfill for jQuery :contains selector
+        if (!window.jQuery) {
+            Element.prototype.contains = function(text) {
+                return this.textContent.indexOf(text) > -1;
+            };
+            
+            document.querySelectorAll = function(selector) {
+                if (selector.includes(':contains')) {
+                    const parts = selector.split(':contains');
+                    const baseSelector = parts[0];
+                    const searchText = parts[1].replace(/[()'"]/g, '');
+                    
+                    const elements = document.querySelectorAll(baseSelector);
+                    const result = [];
+                    
+                    elements.forEach(el => {
+                        if (el.textContent.includes(searchText)) {
+                            result.push(el);
+                        }
+                    });
+                    
+                    return result;
+                } else {
+                    return document.querySelectorAll(selector);
+                }
+            };
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'954bb704f054521f',t:'MTc1MDc2Mjc1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
